@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>一个没什么意思的网页</title>
+</head>
+<link href="style.css" rel="stylesheet" type="text/css" media="all"/>
+<link rel="icon" type="image/x-icon" href="icon.ico" />
+<!--Google Fonts-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+<!--Google Fonts-->
+<body>
+<!--search start here-->
+<div class="search">
+    <div class="s-bar">
+        <form action=""  enctype="application/x-www-form-urlencoded">
+            <p>词汇相似度计算</p>
+            <br>
+            <input id="word1" type="text"  value="" onfocus="this.value = '';" placeholder="词汇一"><br><br>
+            <input id="word2" type="text"  value="" onfocus="this.value = '';" placeholder="词汇二"><br>
+            <p id="zone">&nbsp;</p>
+            <input type="button" onclick="similarity()" value="确定"/>
+        </form>
+
+        <form action=""  enctype="application/x-www-form-urlencoded">
+            <br><br>
+            <p>词义运算器</p>
+            <p>计算表达式示例：1.&nbsp;&nbsp;苹果-微软&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;&nbsp;苹果+0.5*微软&nbsp;&nbsp;(0.5为权值)</p>
+            <br>
+            <input id="sentence" type="text"  value="" onfocus="this.value = '';" placeholder="计算表达式"><br>
+            <p id="zone2">&nbsp;</p>
+            <input type="button" onclick="word_operation()" value="确定"/>
+        </form>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript">
+    function similarity() {
+        var word1=document.getElementById('word1').value;
+        var word2=document.getElementById('word2').value;
+      //  alert(word1+","+word2);
+        if(word1=="" || word2==""){
+            alert("请正确输入词汇一和词汇二");
+        }else {
+            var xmlhttp;
+            if (window.XMLHttpRequest){
+                xmlhttp=new XMLHttpRequest();
+            }else {
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                {
+                    eval('var data='+ xmlhttp.responseText);
+                    if("-1" == data['last']){
+                        var s="遇到未收录的词汇！";
+                    }else{
+                        var s=data['word1']+'和'+data['word2']+'的相似度为'+data['last'];
+                    }
+                    document.getElementById('zone').innerHTML=s;
+                }
+            }
+            xmlhttp.open("GET","similarity.php?word1="+word1+"&word2="+word2,true);
+            xmlhttp.send();
+        }
+    }
+    function word_operation() {
+        var sentence=document.getElementById('sentence').value;
+        //  alert(word1+","+word2);
+        if(sentence==""){
+            alert("请正确输入表达式");
+        }else {
+            var xmlhttp;
+            if (window.XMLHttpRequest){
+                xmlhttp=new XMLHttpRequest();
+            }else {
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                {
+                    eval('var data='+ xmlhttp.responseText);
+                    if("-1" == data['result']){
+                        var s="表达式有误，可能是有词汇未收录";
+                    }else{
+                        // var s=data['word1']+'和'+data['word2']+'的相似度为'+data['smlrt'];
+                        var s = "结果为："+data['result'];
+                    }
+                    document.getElementById('zone2').innerHTML=s;
+                }
+            }
+            xmlhttp.open("GET","word_operation.php?sentence="+sentence,true);
+            xmlhttp.send();
+        }
+    }
+</script>
+</html>

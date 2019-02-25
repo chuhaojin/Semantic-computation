@@ -1,0 +1,4 @@
+由于word2vec占用空间过大，因此上传到百度网盘。
+链接：链接：https://pan.baidu.com/s/1rFJYxKzmhhoihn8rLIIjPQ 
+提取码：ly4w
+下载解压后放到当下文件夹即可。
